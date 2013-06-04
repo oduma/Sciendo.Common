@@ -12,10 +12,12 @@ namespace Sciendo.Common.WCF
             {
                 WSDualHttpBinding wsDualHttpBinding=new WSDualHttpBinding();
                 wsDualHttpBinding.SendTimeout = TimeSpan.FromMinutes(25);
+                wsDualHttpBinding.ReceiveTimeout = TimeSpan.FromMinutes(25);
                 return wsDualHttpBinding;
             }
             BasicHttpBinding basicHttpBinding= new BasicHttpBinding();
             basicHttpBinding.SendTimeout = TimeSpan.FromMinutes(25);
+            basicHttpBinding.ReceiveTimeout = TimeSpan.FromMinutes(25);
             return basicHttpBinding;
         }
     }

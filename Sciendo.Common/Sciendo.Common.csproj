@@ -86,7 +86,9 @@
     <Compile Include="WCF\Clients\IInitiateClient.cs" />
     <Compile Include="WCF\SciendoAuditBehavior.cs" />
     <Compile Include="WCF\SciendoAuditMessageInspector.cs" />
-    <Compile Include="WCF\WCFHostServiceBase.cs" />
+    <Compile Include="WCF\WCFHostServiceBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
