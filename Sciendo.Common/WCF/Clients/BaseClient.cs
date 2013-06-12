@@ -33,6 +33,8 @@ namespace Sciendo.Common.WCF.Clients
 
                 _channel = (ICommunicationObject)Proxy;
 
+                ((IContextChannel)Proxy).OperationTimeout = TimeSpan.FromSeconds(15);
+
             }
         }
 
@@ -62,13 +64,12 @@ namespace Sciendo.Common.WCF.Clients
                 Proxy = channelFactory.CreateChannel();
 
                 _channel = (ICommunicationObject) Proxy;
-
             }
         }
 
         protected virtual void OnTimeoutException(TimeoutException tex)
         {
-            _channel.Abort();
+            //_channel.Abort();
             throw tex;
         }
 
@@ -80,7 +81,7 @@ namespace Sciendo.Common.WCF.Clients
 
         protected virtual void OnException(Exception ex)
         {
-            _channel.Abort();
+            //_channel.Abort();
             throw ex;
         }
         #region IDisposable Members
