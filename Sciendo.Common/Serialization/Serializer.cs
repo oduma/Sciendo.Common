@@ -43,6 +43,25 @@ namespace Sciendo.Common.Serialization
             }
 
         }
+        public static void SerializeOneToFile<T>(T data, string fileName) where T : class
+        {
+            using (FileStream fs = new FileStream(fileName, FileMode.Create))
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));
+                xmlSerializer.Serialize(fs, data);
+            }
+        }
+
+        public static T DeserializeOneFromFile<T>(string fileName) where T : class
+        {
+            if (!File.Exists(fileName))
+                return null;
+            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+                return (xmlSerializer.Deserialize(fs) as T);
+            }
+        }
 
     }
 }
