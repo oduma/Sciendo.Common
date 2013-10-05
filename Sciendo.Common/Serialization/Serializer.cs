@@ -47,7 +47,7 @@ namespace Sciendo.Common.Serialization
         {
             using (FileStream fs = new FileStream(fileName, FileMode.Create))
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
                 xmlSerializer.Serialize(fs, data);
             }
         }
