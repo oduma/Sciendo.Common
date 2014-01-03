@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.ServiceModel.Discovery;
 using System.ServiceProcess;
 using Sciendo.Common.Logging;
 
@@ -45,6 +46,30 @@ namespace Sciendo.Common.WCF
 
             return serviceHost;
         }
+
+        protected virtual ServiceHost CreateAndConfigureDiscoverableServiceHost<T>(T serviceInstance, Uri baseAddress, bool isDuplex = false)
+        {
+            var serviceHost = new ServiceHost(serviceInstance, baseAddress);
+            var serviceEndPoint = serviceHost.AddServiceEndpoint(typeof(T), ClientServerBindingHelper.GetBinding(isDuplex), string.Empty);
+
+            serviceEndPoint.Behaviors.Add(new SciendoAuditBehavior());
+
+            // ** DISCOVERY ** //
+            // make the service discoverable by adding the discovery behavior
+            ServiceDiscoveryBehavior serviceDiscoveryBehavior = new ServiceDiscoveryBehavior();
+            serviceHost.Description.Behaviors.Add(serviceDiscoveryBehavior);
+
+            // send announcements on UDP multicast transport
+            serviceDiscoveryBehavior.AnnouncementEndpoints.Add(
+              new UdpAnnouncementEndpoint());
+
+            // ** DISCOVERY ** //
+            // add the discovery endpoint that specifies where to publish the services
+            serviceHost.AddServiceEndpoint(new UdpDiscoveryEndpoint());
+
+            return serviceHost;
+        }
+
 
 
     }
