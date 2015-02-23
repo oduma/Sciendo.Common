@@ -8,8 +8,14 @@ namespace Sciendo.Common.Serialization
 {
     public static class Serializer
     {
-        public static T Deserialize<T>(string xmlString) where T : class
+        public static T Deserialize<T>(string xmlString,Func<string, bool> preSerializationCheck=null,Func<string, string> preSerializationProcessing=null ) where T : class
         {
+            if (preSerializationCheck != null)
+                if (!preSerializationCheck(xmlString))
+                    throw new PreSerializationCheckException();
+            if (preSerializationProcessing != null)
+                xmlString = preSerializationProcessing(xmlString);
+
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
             MemoryStream ms = new MemoryStream(new UTF8Encoding().GetBytes(xmlString));
             return xmlSerializer.Deserialize(ms) as T;
@@ -62,11 +68,6 @@ namespace Sciendo.Common.Serialization
             using (TextReader fs = File.OpenText(fileName))
             {
                 var str = fs.ReadToEnd();
-                if (preSerializationCheck != null)
-                    if (!preSerializationCheck(str))
-                        throw new PreSerializationCheckException();
-                if (preSerializationProcessing != null)
-                    str = preSerializationProcessing(str);
                 return Deserialize<T>(str);
             }
         }
