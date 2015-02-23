@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -52,16 +53,26 @@ namespace Sciendo.Common.Serialization
             }
         }
 
-        public static T DeserializeOneFromFile<T>(string fileName) where T : class
+        public static T DeserializeOneFromFile<T>(string fileName,
+            Func<string, bool> preSerializationCheck = null,
+            Func<string, string> preSerializationProcessing = null) where T : class
         {
             if (!File.Exists(fileName))
-                return null;
-            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+                throw new FileNotFoundException(fileName);
+            using (TextReader fs = File.OpenText(fileName))
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-                return (xmlSerializer.Deserialize(fs) as T);
+                var str = fs.ReadToEnd();
+                if (preSerializationCheck != null)
+                    if (!preSerializationCheck(str))
+                        throw new PreSerializationCheckException();
+                if (preSerializationProcessing != null)
+                    str = preSerializationProcessing(str);
+                return Deserialize<T>(str);
             }
         }
+    }
 
+    public class PreSerializationCheckException : Exception
+    {
     }
 }
