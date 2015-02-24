@@ -68,7 +68,7 @@ namespace Sciendo.Common.Serialization
             using (TextReader fs = File.OpenText(fileName))
             {
                 var str = fs.ReadToEnd();
-                return Deserialize<T>(str);
+                return Deserialize<T>(str,preSerializationCheck,preSerializationProcessing);
             }
         }
     }
