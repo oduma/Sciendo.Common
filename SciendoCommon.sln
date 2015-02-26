@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.Common", "Sciendo.Common\Sciendo.Common.csproj", "{3199C509-94B0-419D-A0F5-8E981812D011}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{43990F42-594B-46DB-A842-977DFDE0A920}"
@@ -10,6 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{43990F42-594
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.Common.Tests", "Sciendo.Common.Tests\Sciendo.Common.Tests.csproj", "{DEB15E59-99E4-4DE6-AE81-44ABA29022CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.IOC", "Sciendo.IOC\Sciendo.IOC.csproj", "{A88B9C50-7737-4C4C-ABE0-9AA2F4C35F2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.IOC.Tests", "Sciendo.IOC.Tests\Sciendo.IOC.Tests.csproj", "{E61A03DB-4CA1-4C81-8713-02943B382ECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.IOC.Tests.SampleLib", "Sciendo.IOC.Tests.SampleLib\Sciendo.IOC.Tests.SampleLib.csproj", "{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +33,18 @@ Global
 		{DEB15E59-99E4-4DE6-AE81-44ABA29022CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEB15E59-99E4-4DE6-AE81-44ABA29022CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEB15E59-99E4-4DE6-AE81-44ABA29022CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A88B9C50-7737-4C4C-ABE0-9AA2F4C35F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A88B9C50-7737-4C4C-ABE0-9AA2F4C35F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A88B9C50-7737-4C4C-ABE0-9AA2F4C35F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A88B9C50-7737-4C4C-ABE0-9AA2F4C35F2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E61A03DB-4CA1-4C81-8713-02943B382ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E61A03DB-4CA1-4C81-8713-02943B382ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E61A03DB-4CA1-4C81-8713-02943B382ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E61A03DB-4CA1-4C81-8713-02943B382ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
