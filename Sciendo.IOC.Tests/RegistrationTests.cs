@@ -72,6 +72,7 @@ namespace Sciendo.IOC.Tests
         }
 
         [Test]
+        [Ignore]
         public void AddAllRegistrationsFromThisAssembliesToContainer()
         {
             AssemblyScanner assemblyScanner= new AssemblyScanner();
@@ -84,6 +85,7 @@ namespace Sciendo.IOC.Tests
         }
 
         [Test]
+        [Ignore]
         public void AddAllRegistrationsFromAnyAssembliesToContainer()
         {
             AssemblyScanner assemblyScanner = new AssemblyScanner();
