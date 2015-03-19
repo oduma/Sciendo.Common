@@ -9,5 +9,14 @@ namespace Sciendo.IOC
         {
             return inTypes.Select(inType => inType.With(lifeStyle));
         }
+
+        public static IEnumerable<RegisteredType> IdentifiedBy(this IEnumerable<RegisteredType> inTypes, string name)
+        {
+            foreach (var inType in inTypes)
+            {
+                inType.IdentifiedBy(name);
+                yield return inType;
+            }
+        }
     }
 }

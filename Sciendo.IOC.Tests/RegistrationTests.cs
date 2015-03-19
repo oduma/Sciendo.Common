@@ -101,6 +101,30 @@ namespace Sciendo.IOC.Tests
             Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Implementation == typeof(Sciendo.IOC.Tests.Samples.Class1)));
             Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Implementation == typeof(Sciendo.IOC.Tests.SampleLib.Class1)));
         }
+        [Test]
+        public void AddAllRegistrationsFromAnyAssembliesToContainerWithASingleName()
+        {
+            AssemblyScanner assemblyScanner = new AssemblyScanner();
+            List<Assembly> assemblies = new List<Assembly>();
+            foreach (var fileName in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, @"Sciendo.IOC.Tests.dll"))
+            {
+                assemblies.Add(Assembly.LoadFrom(fileName));
+            }
+            _container.Add(assemblyScanner.From(assemblies.ToArray()).BasedOn<ExtraSampleBase>().IdentifiedBy("myownsamples").With(LifeStyle.Transient).ToArray());
+            List<Assembly> assemblies2 = new List<Assembly>();
+            foreach (var fileName in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, @"Sciendo.IOC.Tests.SampleLib.dll"))
+            {
+                assemblies2.Add(Assembly.LoadFrom(fileName));
+            }
+            _container.Add(assemblyScanner.From(assemblies2.ToArray()).BasedOn<ExtraSampleBase>().IdentifiedBy("extrasamples").With(LifeStyle.Transient).ToArray());
+            Assert.IsNotNull(_container.RegisteredTypes);
+            Assert.AreEqual(2, _container.RegisteredTypes.Count);
+            Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Name == "myownsamples"));
+            Assert.AreEqual(2, _container.RegisteredTypes.Count(t => t.Service == typeof(ExtraSampleBase)));
+            Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Implementation == typeof(Sciendo.IOC.Tests.Samples.Class1)));
+            Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Implementation == typeof(Sciendo.IOC.Tests.SampleLib.Class1)));
+            Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Name == "extrasamples"));
 
+        }
     }
 }
