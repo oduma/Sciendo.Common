@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.IOC.Tests", "Sciend
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.IOC.Tests.SampleLib", "Sciendo.IOC.Tests.SampleLib\Sciendo.IOC.Tests.SampleLib.csproj", "{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.IOC.Configuration", "Sciendo.IOC.Configuration\Sciendo.IOC.Configuration.csproj", "{B04A615E-A726-4948-9691-922416A2A17F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04A615E-A726-4948-9691-922416A2A17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04A615E-A726-4948-9691-922416A2A17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04A615E-A726-4948-9691-922416A2A17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04A615E-A726-4948-9691-922416A2A17F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

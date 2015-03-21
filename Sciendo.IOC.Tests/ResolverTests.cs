@@ -103,7 +103,7 @@ namespace Sciendo.IOC.Tests
             var result = _container.ResolveAll<ExtraSampleBase>();
             Assert.IsNotNull(result);
             Assert.True(result.Any(t => t is ExtraSampleBase));
-            Assert.AreEqual(4, result.Count());
+            Assert.AreEqual(7, result.Count());
             result[0].Property = "property1";
             result[1].Property = "property2";
             Assert.AreEqual("property1", result[0].Property);

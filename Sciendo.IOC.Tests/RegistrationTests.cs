@@ -118,11 +118,11 @@ namespace Sciendo.IOC.Tests
             }
             _container.Add(assemblyScanner.From(assemblies2.ToArray()).BasedOn<ExtraSampleBase>().IdentifiedBy("extrasamples").With(LifeStyle.Transient).ToArray());
             Assert.IsNotNull(_container.RegisteredTypes);
-            Assert.AreEqual(3, _container.RegisteredTypes.Count);
+            Assert.AreEqual(7, _container.RegisteredTypes.Count);
             Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Name == "myownsamples"));
-            Assert.AreEqual(2, _container.RegisteredTypes.Count(t => t.Service == typeof(ExtraSampleBase)));
-            Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Implementation == typeof(Sciendo.IOC.Tests.Samples.Class1)));
-            Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Implementation == typeof(Sciendo.IOC.Tests.SampleLib.Class1)));
+            Assert.AreEqual(5, _container.RegisteredTypes.Count(t => t.Service == typeof(ExtraSampleBase)));
+            Assert.AreEqual(2, _container.RegisteredTypes.Count(t => t.Implementation == typeof(Sciendo.IOC.Tests.Samples.Class1)));
+            Assert.AreEqual(3, _container.RegisteredTypes.Count(t => t.Implementation == typeof(Sciendo.IOC.Tests.SampleLib.Class1)));
             Assert.AreEqual(1, _container.RegisteredTypes.Count(t => t.Name == "extrasamples"));
 
         }

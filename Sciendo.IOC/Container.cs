@@ -16,7 +16,7 @@ namespace Sciendo.IOC
 
         private static readonly Container Instance= new Container(); 
 
-        private Container()
+        protected Container()
         {
             lock (SynchLock)
             {
