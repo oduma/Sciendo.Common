@@ -84,7 +84,7 @@ namespace Sciendo.IOC.Configuration
             return this;
         }
 
-        public ConfiguredContainer AddFirstFromFilteredAssemblies<T>(LifeStyle lifeStyle, string additionalQualifier = null, params object[] constrcut)
+        public ConfiguredContainer AddFirstFromFilteredAssemblies<T>(LifeStyle lifeStyle, string additionalQualifier = null, params object[] constructorParams)
         {
             foreach (var key in LoadedAssemblies.Keys)
             {
@@ -103,7 +103,7 @@ namespace Sciendo.IOC.Configuration
                 }
                 else
                 {
-                    _container.Add(regType.WithConstructorParameters());
+                    _container.Add(regType.WithConstructorParameters(constructorParams));
                 }
             }
             return this;
