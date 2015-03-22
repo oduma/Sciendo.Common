@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Sciendo.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sciendo.Common.1.0.0-Build00010\lib\net40\Sciendo.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Sciendo.IOC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sciendo.IOC.1.0.0-Build00010\lib\portable-net40+sl50+win+wp80\Sciendo.IOC.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -50,16 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sciendo.Common\Sciendo.Common.csproj">
-      <Project>{3199c509-94b0-419d-a0f5-8e981812d011}</Project>
-      <Name>Sciendo.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sciendo.IOC\Sciendo.IOC.csproj">
-      <Project>{a88b9c50-7737-4c4c-abe0-9aa2f4c35f2c}</Project>
-      <Name>Sciendo.IOC</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
