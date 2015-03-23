@@ -41,7 +41,7 @@ namespace Sciendo.IOC.Configuration
             foreach (var assemblyFilter in assemblyFilters.Split(new[] { assemblyFiltersSeparator }))
             {
                 var foundAssemblyForFilter = false;
-                foreach (var fileName in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, assemblyFilter))
+                foreach (var fileName in GetFiles(assemblyFilter))
                 {
                     Assembly assembly = null;
                     try
@@ -59,8 +59,17 @@ namespace Sciendo.IOC.Configuration
                     }
                 }
                 if(!foundAssemblyForFilter)
-                    LoggingManager.Debug("No assembly found for filter " + assemblyFilter +" in folder: " + AppDomain.CurrentDomain.BaseDirectory);
+                    LoggingManager.Debug("No assembly found for filter " + assemblyFilter +" in folder: " + AppDomain.CurrentDomain.BaseDirectory + " or its bin sub folder.");
             }
+        }
+
+        private static string[] GetFiles(string assemblyFilter)
+        {
+            var filteredFiles= Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, assemblyFilter);
+            if (filteredFiles.Length == 0)
+                filteredFiles = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin"),
+                    assemblyFilter);
+            return filteredFiles;
         }
 
         public ConfiguredContainer AddAllFromFilteredAssemblies<T>(LifeStyle lifeStyle, string additionalQualifier = null)
