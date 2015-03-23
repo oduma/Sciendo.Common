@@ -40,12 +40,14 @@ namespace Sciendo.IOC.Configuration
         {
             foreach (var assemblyFilter in assemblyFilters.Split(new[] { assemblyFiltersSeparator }))
             {
+                var foundAssemblyForFilter = false;
                 foreach (var fileName in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, assemblyFilter))
                 {
                     Assembly assembly = null;
                     try
                     {
                         assembly = Assembly.LoadFrom(fileName);
+                        foundAssemblyForFilter = true;
                     }
                     catch (Exception ex)
                     {
@@ -56,6 +58,8 @@ namespace Sciendo.IOC.Configuration
                         yield return assembly;
                     }
                 }
+                if(!foundAssemblyForFilter)
+                    LoggingManager.Debug("No assembly found for filter " + assemblyFilter +" in folder: " + AppDomain.CurrentDomain.BaseDirectory);
             }
         }
 
