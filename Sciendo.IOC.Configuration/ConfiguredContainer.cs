@@ -67,8 +67,12 @@ namespace Sciendo.IOC.Configuration
         {
             var filteredFiles= Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, assemblyFilter);
             if (filteredFiles.Length == 0)
-                filteredFiles = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin"),
-                    assemblyFilter);
+            {
+                var alternatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin");
+                if(Directory.Exists(alternatePath))
+                    filteredFiles = Directory.GetFiles(alternatePath,
+                        assemblyFilter);
+            }
             return filteredFiles;
         }
 
