@@ -25,7 +25,9 @@ namespace Sciendo.IOC.Tests
                 new RegisteredType().For<Sample2>().BasedOn<ISample>().With(LifeStyle.Transient).IdentifiedBy("mysecondsample"),
                 new RegisteredType().For<ScndSample>().BasedOn<IScndSample>().With(LifeStyle.Singleton),
                 new RegisteredType().For<ScndSample2>().BasedOn<IScndSample>().With(LifeStyle.Singleton).IdentifiedBy("myscndsample"),
-                new RegisteredType().For<ScndSample>().BasedOn<ISample>().With(LifeStyle.Transient).IdentifiedBy("wrong"));
+                new RegisteredType().For<ScndSample>().BasedOn<ISample>().With(LifeStyle.Transient).IdentifiedBy("wrong"),
+                new RegisteredType().For<Sample>().BasedOn<ISample>().With(LifeStyle.Transient).IdentifiedBy("mysample")
+                );
             AssemblyScanner assemblyScanner = new AssemblyScanner();
             List<Assembly> assemblies = new List<Assembly>();
             foreach (var fileName in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, @"Sciendo.IOC.Tests*.dll"))
@@ -124,6 +126,22 @@ namespace Sciendo.IOC.Tests
             var result = _container.Resolve<INoSample>();
 
         }
-        
+
+        [Test]
+
+        public void ResolveToNewOk()
+        {
+            var result = _container.ResolveToNew<ISample>("mysample", "first property", 2);
+            var result1 = _container.ResolveToNew<ISample>("mysample", "first property new", 21);
+            Assert.IsNotNull(result);
+            Assert.True(result is Sample);
+            Assert.AreEqual(result.Property1,"first property");
+            Assert.AreEqual(2, result.Property2);
+            Assert.IsNotNull(result1);
+            Assert.True(result1 is Sample);
+            Assert.AreEqual(result1.Property1, "first property new");
+            Assert.AreEqual(21, result1.Property2);
+
+        }
     }
 }

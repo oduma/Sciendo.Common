@@ -71,5 +71,16 @@ namespace Sciendo.IOC
                 return (T)instance.Instance;
             }
         }
+        public T ResolveToNew<T>(string name, params object[] constructorArgs)
+        {
+            lock (SynchLock)
+            {
+                string key = GetKey(typeof(T), name);
+                var instance = RegisteredTypes.FirstOrDefault(t => t.IsSuitable<T>(key));
+                if (instance == null)
+                    throw new NotImplementedException("Cannot resolve " + typeof(T).FullName);
+                return (T)instance.NewInstance(constructorArgs);
+            }
+        }
     }
 }

@@ -26,23 +26,35 @@ namespace Sciendo.IOC
 
         internal object Instance { 
             get 
-        {
-
-            if ((_instance == null)
-                || (_instance != null && LifeStyle == LifeStyle.Transient))
             {
-                if (_params != null && _params.Length > 0)
-                {
-                    _instance = Activator.CreateInstance(Implementation, _params);
-                }
-                else
-                {
-                    _instance = Activator.CreateInstance(Implementation);
-                }
-            }
-            return _instance;
 
+                if ((_instance == null)
+                    || (_instance != null && LifeStyle == LifeStyle.Transient))
+                {
+                    if (_params != null && _params.Length > 0)
+                    {
+                        _instance = Activator.CreateInstance(Implementation, _params);
+                    }
+                    else
+                    {
+                        _instance = Activator.CreateInstance(Implementation);
+                    }
+                }
+                return _instance;
+
+            }
         }
+
+        public object NewInstance(params object[] constructorArgs)
+        {
+            if (constructorArgs != null && constructorArgs.Length > 0)
+            {
+                return Activator.CreateInstance(Implementation, constructorArgs);
+            }
+            else
+            {
+                return Activator.CreateInstance(Implementation);
+            }
         }
 
         internal string Name { get; set; }
