@@ -64,7 +64,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IO\ContentCopier.cs" />
+    <Compile Include="IO\ContentMover.cs" />
+    <Compile Include="IO\ContentWriterBase.cs" />
+    <Compile Include="IO\DirectoryEnumerator.cs" />
     <Compile Include="IO\DirectoryMonitor.cs" />
+    <Compile Include="IO\DirectoryOperations.cs" />
+    <Compile Include="IO\DirectoryReadEventArgs.cs" />
+    <Compile Include="IO\ExtensionsReadEventArgs.cs" />
+    <Compile Include="IO\FileEnumerator.cs" />
+    <Compile Include="IO\IContentWriter.cs" />
+    <Compile Include="IO\IDirectoryEnumerator.cs" />
+    <Compile Include="IO\IDirectoryOperations.cs" />
+    <Compile Include="IO\IFileEnumerator.cs" />
+    <Compile Include="IO\IFileOperations.cs" />
+    <Compile Include="IO\IFileReader.cs" />
+    <Compile Include="IO\IFileWriter.cs" />
+    <Compile Include="IO\TextFileReader.cs" />
+    <Compile Include="IO\TextFileWriter.cs" />
     <Compile Include="Logging\Log4NetExtensions.cs" />
     <Compile Include="Logging\LoggingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
