@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.Common", "Sciendo.Common\Sciendo.Common.csproj", "{3199C509-94B0-419D-A0F5-8E981812D011}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.IOC.Tests.SampleLib", "Sciendo.IOC.Tests.SampleLib\Sciendo.IOC.Tests.SampleLib.csproj", "{9870E4C4-C2A2-43A6-BC56-70B928F9F5BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.IOC.Configuration", "Sciendo.IOC.Configuration\Sciendo.IOC.Configuration.csproj", "{B04A615E-A726-4948-9691-922416A2A17F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sciendo.Common.MySynchExtensions", "Sciendo.Common.MySynchExtensions\Sciendo.Common.MySynchExtensions.csproj", "{96D1D4A0-8BD6-493B-A4A3-1372EE52A105}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{B04A615E-A726-4948-9691-922416A2A17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B04A615E-A726-4948-9691-922416A2A17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B04A615E-A726-4948-9691-922416A2A17F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96D1D4A0-8BD6-493B-A4A3-1372EE52A105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96D1D4A0-8BD6-493B-A4A3-1372EE52A105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96D1D4A0-8BD6-493B-A4A3-1372EE52A105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96D1D4A0-8BD6-493B-A4A3-1372EE52A105}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
