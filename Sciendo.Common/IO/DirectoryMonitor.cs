@@ -3,39 +3,40 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Sciendo.Common.Logging;
 
 namespace Sciendo.Common.IO
 {
     public delegate void FileSystemEvent(String path);
-    
+
     public delegate void FileRenamedEvent(string fromPath, string toPath);
 
-  public class DirectoryMonitor
-  {
+    public class DirectoryMonitor
+    {
         class PendingEvent
         {
-          public DateTime TimeStamp {get;set;}
-          public WatcherChangeTypes ChangeType {get;set;}
-          public RenamedEventArgs RenamedEventArgs { get; set; }
+            public DateTime TimeStamp { get; set; }
+            public WatcherChangeTypes ChangeType { get; set; }
+            public RenamedEventArgs RenamedEventArgs { get; set; }
         }
 
-        private readonly FileSystemWatcher _fileSystemWatcher = 
+        private readonly FileSystemWatcher _fileSystemWatcher =
         new FileSystemWatcher();
-    
-        private readonly Dictionary<string, PendingEvent> _pendingEvents = 
+
+        private readonly Dictionary<string, PendingEvent> _pendingEvents =
         new Dictionary<string, PendingEvent>();
 
         private readonly Timer _timer;
-        private bool _timerStarted;
+        private bool _timerStarted = false;
 
         public DirectoryMonitor(string dirPath)
         {
             _fileSystemWatcher.Path = dirPath;
             _fileSystemWatcher.IncludeSubdirectories = true;
-            _fileSystemWatcher.Created += OnChange;
-            _fileSystemWatcher.Changed += OnChange;
-            _fileSystemWatcher.Deleted += OnChange;
-            _fileSystemWatcher.Renamed += OnRename;
+            _fileSystemWatcher.Created += new FileSystemEventHandler(OnChange);
+            _fileSystemWatcher.Changed += new FileSystemEventHandler(OnChange);
+            _fileSystemWatcher.Deleted += new FileSystemEventHandler(OnChange);
+            _fileSystemWatcher.Renamed += new RenamedEventHandler(OnRename);
 
             _timer = new Timer(OnTimeout, null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -50,29 +51,36 @@ namespace Sciendo.Common.IO
         {
             _fileSystemWatcher.EnableRaisingEvents = true;
         }
-        
+
         public void Stop()
         {
             _fileSystemWatcher.EnableRaisingEvents = false;
         }
 
-        private string _parentDirectory=string.Empty;
+        private string _parentDirectory = string.Empty;
 
         private void OnChange(object sender, FileSystemEventArgs e)
         {
-            if(Directory.Exists(e.FullPath))
+            if (Directory.Exists(e.FullPath))
             {
                 if ((string.IsNullOrEmpty(_parentDirectory) || _parentDirectory != e.FullPath))
                 {
                     _parentDirectory = GetParentDirectory(e.FullPath);
-                    foreach (var filePath in Directory.GetFiles(e.FullPath, "*.*", SearchOption.AllDirectories))
+                    try
                     {
-                        QueueEventForFile(filePath, e.ChangeType);
+                        foreach (var filePath in Directory.GetFiles(e.FullPath, "*.*", SearchOption.AllDirectories))
+                        {
+                            QueueEventForFile(filePath, e.ChangeType);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        LoggingManager.LogSciendoSystemError(string.Format("Problems reading files from the path {0}.", e.FullPath), exception);
                     }
                 }
                 else
                 {
-                    _parentDirectory=string.Empty;
+                    _parentDirectory = string.Empty;
                 }
             }
             else
@@ -121,7 +129,7 @@ namespace Sciendo.Common.IO
         private string GetParentDirectory(string currentDirectory)
         {
             var parentDirectory = string.Empty;
-            var pathParts = currentDirectory.Split(new[] { Path.DirectorySeparatorChar });
+            var pathParts = currentDirectory.Split(new char[] { Path.DirectorySeparatorChar });
             for (int i = 0; i < pathParts.Length - 1; i++)
             {
                 parentDirectory += (@"\" + pathParts[i]);
@@ -140,7 +148,7 @@ namespace Sciendo.Common.IO
                 uniquePendingEvents = FindReadyPaths(_pendingEvents);
 
                 // Remove paths that are going to be used now
-                uniquePendingEvents.Keys.ToList().ForEach(delegate(string path)
+                uniquePendingEvents.Keys.ToList().ForEach(delegate (string path)
                 {
                     _pendingEvents.Remove(path);
                 });
@@ -154,10 +162,10 @@ namespace Sciendo.Common.IO
             }
 
             // Fire an event for each path that has changed
-            uniquePendingEvents.Keys.ToList().ForEach(delegate(string key)
+            uniquePendingEvents.Keys.ToList().ForEach(delegate (string key)
             {
 
-                FireEvent(key,uniquePendingEvents[key]);
+                FireEvent(key, uniquePendingEvents[key]);
             });
         }
 
@@ -173,7 +181,7 @@ namespace Sciendo.Common.IO
                 double diff = now.Subtract(entry.Value.TimeStamp).TotalMilliseconds;
                 if (diff >= 75)
                 {
-                    results.Add(entry.Key,entry.Value);
+                    results.Add(entry.Key, entry.Value);
                 }
             }
 
@@ -202,7 +210,7 @@ namespace Sciendo.Common.IO
                     }
                     else
                     {
-                        foreach(var newFilePath in Directory.GetFiles(evt.RenamedEventArgs.FullPath,"*.*",SearchOption.AllDirectories))
+                        foreach (var newFilePath in Directory.GetFiles(evt.RenamedEventArgs.FullPath, "*.*", SearchOption.AllDirectories))
                         {
                             if (Rename != null)
                                 Rename(newFilePath.Replace(evt.RenamedEventArgs.FullPath, evt.RenamedEventArgs.OldFullPath), newFilePath);
