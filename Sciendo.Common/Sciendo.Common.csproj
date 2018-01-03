@@ -79,6 +79,7 @@
     <Compile Include="IO\IFileEnumerator.cs" />
     <Compile Include="IO\IFileOperations.cs" />
     <Compile Include="IO\IFileReader.cs" />
+    <Compile Include="IO\IFilesReader.cs" />
     <Compile Include="IO\IFileWriter.cs" />
     <Compile Include="IO\TextFileReader.cs" />
     <Compile Include="IO\TextFileWriter.cs" />
