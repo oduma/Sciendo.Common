@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace Sciendo.Common.IO
 {
@@ -6,7 +7,7 @@ namespace Sciendo.Common.IO
     {
         public void Write(string data, string filePath)
         {
-            File.WriteAllText(filePath,data);
+            File.WriteAllText(filePath, data);
         }
     }
 }
