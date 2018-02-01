@@ -11,7 +11,7 @@ namespace Sciendo.IOC.Configuration
     public class ConfiguredContainer
     {
         internal IOCConfigurationSection CurrentConfiguration;
-        internal Dictionary<string, IEnumerable<Assembly>> LoadedAssemblies;
+        public Dictionary<string, IEnumerable<Assembly>> LoadedAssemblies;
         private readonly AssemblyScanner _scanner = new AssemblyScanner();
         private readonly Container _container;
 
