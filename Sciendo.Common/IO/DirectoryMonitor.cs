@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
-using System.Linq;
 using System.Threading;
-using Sciendo.Common.Logging;
 
 namespace Sciendo.Common.IO
 {
@@ -15,7 +13,6 @@ namespace Sciendo.Common.IO
     {
         class PendingEvent
         {
-            public DateTime TimeStamp { get; set; }
             public WatcherChangeTypes ChangeType { get; set; }
             public RenamedEventArgs RenamedEventArgs { get; set; }
         }
@@ -23,20 +20,20 @@ namespace Sciendo.Common.IO
         private readonly FileSystemWatcher _fileSystemWatcher =
         new FileSystemWatcher();
 
-        private readonly Dictionary<string, PendingEvent> _pendingEvents =
-        new Dictionary<string, PendingEvent>();
+        private readonly ConcurrentDictionary<string, PendingEvent> _pendingEvents =
+        new ConcurrentDictionary<string, PendingEvent>();
 
         private readonly Timer _timer;
-        private bool _timerStarted = false;
+        private bool _timerStarted;
 
         public DirectoryMonitor(string dirPath)
         {
             _fileSystemWatcher.Path = dirPath;
             _fileSystemWatcher.IncludeSubdirectories = true;
-            _fileSystemWatcher.Created += new FileSystemEventHandler(OnChange);
-            _fileSystemWatcher.Changed += new FileSystemEventHandler(OnChange);
-            _fileSystemWatcher.Deleted += new FileSystemEventHandler(OnChange);
-            _fileSystemWatcher.Renamed += new RenamedEventHandler(OnRename);
+            _fileSystemWatcher.Created += OnChange;
+            _fileSystemWatcher.Changed += OnChange;
+            _fileSystemWatcher.Deleted += OnChange;
+            _fileSystemWatcher.Renamed += OnRename;
 
             _timer = new Timer(OnTimeout, null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -57,48 +54,18 @@ namespace Sciendo.Common.IO
             _fileSystemWatcher.EnableRaisingEvents = false;
         }
 
-        private string _parentDirectory = string.Empty;
-
         private void OnChange(object sender, FileSystemEventArgs e)
         {
-            if (Directory.Exists(e.FullPath))
-            {
-                if ((string.IsNullOrEmpty(_parentDirectory) || _parentDirectory != e.FullPath))
-                {
-                    _parentDirectory = GetParentDirectory(e.FullPath);
-                    try
-                    {
-                        foreach (var filePath in Directory.GetFiles(e.FullPath, "*.*", SearchOption.AllDirectories))
-                        {
-                            QueueEventForFile(filePath, e.ChangeType);
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        LoggingManager.LogSciendoSystemError(string.Format("Problems reading files from the path {0}.", e.FullPath), exception);
-                    }
-                }
-                else
-                {
-                    _parentDirectory = string.Empty;
-                }
-            }
-            else
-            {
-                QueueEventForFile(e.FullPath, e.ChangeType);
-            }
+            QueueChangeEvent(e.FullPath, e.ChangeType);
         }
 
-        private void QueueEventForFile(string filePath, WatcherChangeTypes watcherChangeType)
+        private void QueueChangeEvent(string filePath, WatcherChangeTypes watcherChangeType)
         {
-            // Don't want other threads messing with the pending events right now
-            lock (_pendingEvents)
+            if (watcherChangeType != WatcherChangeTypes.Created
+                && watcherChangeType != WatcherChangeTypes.All && !Directory.Exists(filePath))
             {
-
-                // Save a timestamp for the most recent event for this path
-                _pendingEvents[filePath] = new PendingEvent { TimeStamp = DateTime.Now, ChangeType = watcherChangeType };
-
-                // Start a timer if not already started
+                _pendingEvents.AddOrUpdate(filePath,
+                    new PendingEvent { ChangeType = watcherChangeType }, (key, existingEvent) => existingEvent);
                 if (!_timerStarted)
                 {
                     _timer.Change(100, 100);
@@ -109,83 +76,36 @@ namespace Sciendo.Common.IO
 
         private void OnRename(object sender, RenamedEventArgs e)
         {
-            // Don't want other threads messing with the pending events right now
-            lock (_pendingEvents)
+            var pendingEvent = new PendingEvent { ChangeType = e.ChangeType, RenamedEventArgs = e };
+            _pendingEvents.AddOrUpdate(e.FullPath, pendingEvent, (key, existingEvent) =>
             {
-                _parentDirectory = GetParentDirectory(e.OldFullPath);
-
-                // Save a timestamp for the most recent event for this path
-                _pendingEvents[e.FullPath] = new PendingEvent { TimeStamp = DateTime.Now, ChangeType = e.ChangeType, RenamedEventArgs = e };
-
-                // Start a timer if not already started
-                if (!_timerStarted)
-                {
-                    _timer.Change(100, 100);
-                    _timerStarted = true;
-                }
-            }
-        }
-
-        private string GetParentDirectory(string currentDirectory)
-        {
-            var parentDirectory = string.Empty;
-            var pathParts = currentDirectory.Split(new char[] { Path.DirectorySeparatorChar });
-            for (int i = 0; i < pathParts.Length - 1; i++)
+                existingEvent.ChangeType = pendingEvent.ChangeType;
+                existingEvent.RenamedEventArgs = pendingEvent.RenamedEventArgs;
+                return existingEvent;
+            });
+            if (!_timerStarted)
             {
-                parentDirectory += (@"\" + pathParts[i]);
+                _timer.Change(100, 100);
+                _timerStarted = true;
             }
-            return parentDirectory.Substring(1, parentDirectory.Length - 1);
         }
 
         private void OnTimeout(object state)
         {
-            Dictionary<string, PendingEvent> uniquePendingEvents;
-
-            // Don't want other threads messing with the pending events right now
-            lock (_pendingEvents)
+            if (_pendingEvents.Count == 0)
             {
-                // Get a list of all paths that should have events thrown
-                uniquePendingEvents = FindReadyPaths(_pendingEvents);
-
-                // Remove paths that are going to be used now
-                uniquePendingEvents.Keys.ToList().ForEach(delegate (string path)
-                {
-                    _pendingEvents.Remove(path);
-                });
-
-                // Stop the timer if there are no more events pending
-                if (_pendingEvents.Count == 0)
-                {
-                    _timer.Change(Timeout.Infinite, Timeout.Infinite);
-                    _timerStarted = false;
-                }
+                _timer.Change(Timeout.Infinite, Timeout.Infinite);
+                _timerStarted = false;
             }
 
-            // Fire an event for each path that has changed
-            uniquePendingEvents.Keys.ToList().ForEach(delegate (string key)
+            foreach (string key in _pendingEvents.Keys)
             {
-
-                FireEvent(key, uniquePendingEvents[key]);
-            });
-        }
-
-        private Dictionary<string, PendingEvent> FindReadyPaths(Dictionary<string, PendingEvent> events)
-        {
-            Dictionary<string, PendingEvent> results = new Dictionary<string, PendingEvent>();
-            DateTime now = DateTime.Now;
-
-            foreach (KeyValuePair<string, PendingEvent> entry in events)
-            {
-                // If the path has not received a new event in the last 75ms
-                // an event for the path should be fired
-                double diff = now.Subtract(entry.Value.TimeStamp).TotalMilliseconds;
-                if (diff >= 75)
+                PendingEvent pendingEvent;
+                if (_pendingEvents.TryRemove(key, out pendingEvent))
                 {
-                    results.Add(entry.Key, entry.Value);
+                    FireEvent(key, pendingEvent);
                 }
             }
-
-            return results;
         }
 
         private void FireEvent(string path, PendingEvent evt)

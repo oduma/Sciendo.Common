@@ -61,7 +61,7 @@ namespace Sciendo.Common.IO
                 foreach (var childDirectory in childDirectories)
                 {
                     var childDirectoryParts = childDirectory.Split(Path.DirectorySeparatorChar);
-                    Do(childDirectory, $"{cleanToPath}{Path.DirectorySeparatorChar}{childDirectoryParts[childDirectoryParts.Length]}");
+                    Do(childDirectory, $"{cleanToPath}{Path.DirectorySeparatorChar}{childDirectoryParts[childDirectoryParts.Length-1]}");
                 }
                 var childFiles = FileEnumerator.Get(fromPath, SearchOption.TopDirectoryOnly);
                 foreach (var childFile in childFiles)
