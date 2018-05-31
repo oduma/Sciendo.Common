@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Sciendo.Common.IO.MTP
 {
-    internal static class MtpPathInterpreter
+    public static class MtpPathInterpreter
     {
         public static bool IsMtpDevice(string path)
         {
