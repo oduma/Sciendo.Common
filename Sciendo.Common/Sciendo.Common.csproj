@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -27,6 +27,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +38,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,6 +49,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -73,14 +79,31 @@
     <Compile Include="IO\DirectoryReadEventArgs.cs" />
     <Compile Include="IO\ExtensionsReadEventArgs.cs" />
     <Compile Include="IO\FileEnumerator.cs" />
+    <Compile Include="IO\FSDirectory.cs" />
+    <Compile Include="IO\FSFile.cs" />
+    <Compile Include="IO\FSStorage.cs" />
     <Compile Include="IO\IContentWriter.cs" />
+    <Compile Include="IO\IDirectory.cs" />
     <Compile Include="IO\IDirectoryEnumerator.cs" />
     <Compile Include="IO\IDirectoryOperations.cs" />
+    <Compile Include="IO\IFile.cs" />
     <Compile Include="IO\IFileEnumerator.cs" />
     <Compile Include="IO\IFileOperations.cs" />
     <Compile Include="IO\IFileReader.cs" />
     <Compile Include="IO\IFilesReader.cs" />
     <Compile Include="IO\IFileWriter.cs" />
+    <Compile Include="IO\IStorage.cs" />
+    <Compile Include="IO\MTP\MtpDeviceManager.cs" />
+    <Compile Include="IO\MTP\MtpDirectory.cs" />
+    <Compile Include="IO\MTP\MtpFile.cs" />
+    <Compile Include="IO\MTP\MtpStorage.cs" />
+    <Compile Include="IO\MTP\MtpPathInterpreter.cs" />
+    <Compile Include="IO\MTP\PortableDevice.cs" />
+    <Compile Include="IO\MTP\PortableDeviceConstants.cs" />
+    <Compile Include="IO\MTP\PortableDeviceFile.cs" />
+    <Compile Include="IO\MTP\PortableDeviceFolder.cs" />
+    <Compile Include="IO\MTP\PortableDeviceObject.cs" />
+    <Compile Include="IO\MTP\PortableDeviceGuids.cs" />
     <Compile Include="IO\TextFileReader.cs" />
     <Compile Include="IO\TextFileWriter.cs" />
     <Compile Include="Logging\Log4NetExtensions.cs" />
@@ -132,7 +155,26 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="PortableDeviceApiLib">
+      <Guid>{1F001332-1A57-4934-BE31-AFFC99F4EE0A}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="PortableDeviceTypesLib">
+      <Guid>{2B00BA2F-E750-4BEB-9235-97142EDE1D3E}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
