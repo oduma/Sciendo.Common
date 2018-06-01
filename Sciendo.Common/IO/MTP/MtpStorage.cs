@@ -1,6 +1,6 @@
 ﻿namespace Sciendo.Common.IO.MTP
 {
-    internal class MtpStorage : IStorage
+    public class MtpStorage : IStorage
     {
         public MtpStorage(IDirectory directory, IFile file)
         {
