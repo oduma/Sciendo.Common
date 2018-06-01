@@ -2,10 +2,10 @@
 {
     public class MtpStorage : IStorage
     {
-        public MtpStorage(IDirectory directory, IFile file)
+        public MtpStorage()
         {
-            Directory = directory;
-            File = file;
+            Directory = new MtpDirectory();
+            File = new MtpFile();
         }
 
         public IDirectory Directory { get; }

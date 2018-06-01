@@ -1,8 +1,8 @@
 ﻿namespace Sciendo.Common.IO
 {
-    internal class FSStorage : IStorage
+    public class FsStorage : IStorage
     {
-        public FSStorage()
+        public FsStorage()
         {
             Directory=new FSDirectory();
             File= new FSFile();
