@@ -35,5 +35,19 @@ namespace Sciendo.Common.IO
             File.Delete(path);
         }
 
+        public byte[] Read(string path)
+        {
+            if (File.Exists(path))
+                return File.ReadAllBytes(path);
+            return new byte[] {};
+        }
+
+        public string ReadAllText(string path)
+        {
+            if (File.Exists(path))
+                return File.ReadAllText(path);
+            return "";
+
+        }
     }
 }

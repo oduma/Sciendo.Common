@@ -87,5 +87,14 @@ namespace Sciendo.Common.IO.MTP
             mtpFile.Delete(mtpDevice);
         }
 
+        public byte[] Read(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ReadAllText(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

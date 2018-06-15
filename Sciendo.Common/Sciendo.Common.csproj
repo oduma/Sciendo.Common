@@ -99,7 +99,6 @@
     <Compile Include="IO\MTP\PortableDeviceFolder.cs" />
     <Compile Include="IO\MTP\PortableDeviceObject.cs" />
     <Compile Include="IO\MTP\PortableDeviceGuids.cs" />
-    <Compile Include="IO\TextFileReader.cs" />
     <Compile Include="Logging\Log4NetExtensions.cs" />
     <Compile Include="Logging\LoggingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

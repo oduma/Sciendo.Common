@@ -10,5 +10,9 @@ namespace Sciendo.Common.IO
         void Create(string localFileName, byte[] body);
         bool Exists(string path);
         void Delete(string path);
+
+        byte[] Read(string path);
+
+        string ReadAllText(string path);
     }
 }

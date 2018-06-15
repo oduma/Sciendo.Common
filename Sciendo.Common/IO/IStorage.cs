@@ -5,5 +5,6 @@
         IDirectory Directory { get; }
 
         IFile File { get; }
+       
     }
 }
