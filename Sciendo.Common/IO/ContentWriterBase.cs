@@ -5,13 +5,11 @@ namespace Sciendo.Common.IO
 {
     public abstract class ContentWriterBase: IContentWriter
     {
-        protected readonly IDirectoryEnumerator DirectoryEnumerator;
-        protected readonly IFileEnumerator FileEnumerator;
+        protected readonly IDirectory Directory;
 
-        protected ContentWriterBase(IDirectoryEnumerator directoryEnumerator, IFileEnumerator fileEnumerator)
+        protected ContentWriterBase(IDirectory directory)
         {
-            DirectoryEnumerator = directoryEnumerator;
-            FileEnumerator = fileEnumerator;
+            Directory = directory;
         }
 
         public abstract void Do(string fromPath, string toPath);
@@ -47,23 +45,23 @@ namespace Sciendo.Common.IO
             if (File.Exists(fromPath))
             {
                 var toDirectoryPath = Path.GetDirectoryName(cleanToPath);
-                if (!string.IsNullOrEmpty(toDirectoryPath) &&!Directory.Exists(toDirectoryPath))
-                    Directory.CreateDirectory(toDirectoryPath);
+                if (!string.IsNullOrEmpty(toDirectoryPath) &&!System.IO.Directory.Exists(toDirectoryPath))
+                    System.IO.Directory.CreateDirectory(toDirectoryPath);
                 if (!File.Exists(cleanToPath))
                     action(fromPath, cleanToPath);
                 return;
             }
-            if (Directory.Exists(fromPath))
+            if (System.IO.Directory.Exists(fromPath))
             {
-                if (!Directory.Exists(cleanToPath))
-                    Directory.CreateDirectory(cleanToPath);
-                var childDirectories = DirectoryEnumerator.GetTopLevel(fromPath);
+                if (!System.IO.Directory.Exists(cleanToPath))
+                    System.IO.Directory.CreateDirectory(cleanToPath);
+                var childDirectories = Directory.GetTopLevel(fromPath);
                 foreach (var childDirectory in childDirectories)
                 {
                     var childDirectoryParts = childDirectory.Split(Path.DirectorySeparatorChar);
                     Do(childDirectory, $"{cleanToPath}{Path.DirectorySeparatorChar}{childDirectoryParts[childDirectoryParts.Length-1]}");
                 }
-                var childFiles = FileEnumerator.Get(fromPath, SearchOption.TopDirectoryOnly);
+                var childFiles = Directory.GetFiles(fromPath, SearchOption.TopDirectoryOnly);
                 foreach (var childFile in childFiles)
                 {
                     var childFileOnly = Path.GetFileName(childFile);

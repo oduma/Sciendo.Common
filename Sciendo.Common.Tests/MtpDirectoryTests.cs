@@ -102,5 +102,107 @@ namespace Sciendo.Common.Tests
             Assert.True(mtpDirectory.Exists(@"Xperia XA\SD Card\Music\abc1"));
         }
 
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetTopLevelNoPath()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            mtpDirectory.GetTopLevel(string.Empty);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetTopLevelNoDevice()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            mtpDirectory.GetTopLevel(@"Xperia XA1\SD Card\Music");
+        }
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetTopLevelNoFolder()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            mtpDirectory.GetTopLevel(@"Xperia XA\SD Card\Music111");
+        }
+        [Test]
+        public void GetTopLevelOk()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            var result = mtpDirectory.GetTopLevel(@"Xperia XA\SD Card\Music");
+            Assert.AreEqual(5,result.Count());
+            Assert.True(result.Any(f=>f=="abc"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetFilesNoPath()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            mtpDirectory.GetFiles(string.Empty,SearchOption.TopDirectoryOnly);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetFilesNoDevice()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            mtpDirectory.GetFiles(@"Xperia XA1\SD Card\Music",SearchOption.TopDirectoryOnly);
+        }
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetFilesNoFolder()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            mtpDirectory.GetFiles(@"Xperia XA\SD Card\Music111", SearchOption.TopDirectoryOnly);
+        }
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetFilesFilePassed()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            mtpDirectory.GetFiles(@"Xperia XA\SD Card\Music\abc\f1.txt", SearchOption.TopDirectoryOnly);
+        }
+        [Test]
+        public void GetFilesAllTopDirectoryOnlyOk()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            var result = mtpDirectory.GetFiles(@"Xperia XA\SD Card\Music\abc",SearchOption.TopDirectoryOnly);
+            Assert.AreEqual(1, result.Count());
+            Assert.True(result.Any(f => f == @"Xperia XA\SD Card\Music\abc\f1.txt"));
+        }
+        [Test]
+        public void GetFilesAllAllDirectoriesOk()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            var result = mtpDirectory.GetFiles(@"Xperia XA\SD Card\Music\abc", SearchOption.AllDirectories);
+            Assert.AreEqual(9, result.Count());
+            Assert.True(result.Any(f => f == @"Xperia XA\SD Card\Music\abc\f1.txt"));
+        }
+        [Test]
+        public void GetFilesFilteredTopDirectoryOnlyOk()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            var result = mtpDirectory.GetFiles(@"Xperia XA\SD Card\Music\abc\abc1", SearchOption.TopDirectoryOnly,new [] {".t1",".t2"});
+            Assert.AreEqual(1, result.Count());
+            Assert.False(result.Any(f => f == @"Xperia XA\SD Card\Music\abc\abc1\f2.txt"));
+            Assert.True(result.Any(f => f == @"Xperia XA\SD Card\Music\abc\abc1\f2.t2"));
+        }
+        [Test]
+        public void GetFilesFilteredAllDirectoriesOk()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            var result = mtpDirectory.GetFiles(@"Xperia XA\SD Card\Music\abc", SearchOption.AllDirectories, new[] { ".t1", ".t2" });
+            Assert.AreEqual(3, result.Count());
+            Assert.False(result.Any(f => f == @"Xperia XA\SD Card\Music\abc\abc1\f2.txt"));
+            Assert.True(result.Any(f => f == @"Xperia XA\SD Card\Music\abc\abc1\f2.t2"));
+            Assert.False(result.Any(f => f == @"Xperia XA\SD Card\Music\abc\f1.txt"));
+        }
+        [Test]
+        public void GetFilesFilteredAllDirectoriesNoMatch()
+        {
+            MtpDirectory mtpDirectory = new MtpDirectory();
+            var result = mtpDirectory.GetFiles(@"Xperia XA\SD Card\Music\abc\abc2", SearchOption.AllDirectories, new[] { ".t4", ".t5" });
+            Assert.AreEqual(0, result.Count());
+        }
     }
 }

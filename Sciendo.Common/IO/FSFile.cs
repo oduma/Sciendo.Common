@@ -13,7 +13,7 @@ namespace Sciendo.Common.IO
     {
         public void WriteAllText(string fileName, string content)
         {
-            new TextFileWriter().Write(content, fileName);
+            File.WriteAllText(fileName, content);
         }
 
         public void Create(string path,byte[] body)
@@ -34,5 +34,6 @@ namespace Sciendo.Common.IO
         {
             File.Delete(path);
         }
+
     }
 }

@@ -4,7 +4,7 @@ namespace Sciendo.Common.IO
 {
     public class ContentCopier:ContentWriterBase
     {
-        public ContentCopier(IDirectoryEnumerator directoryEnumerator, IFileEnumerator fileEnumerator) : base(directoryEnumerator, fileEnumerator)
+        public ContentCopier(IDirectory directory) : base(directory)
         {
         }
 

@@ -4,7 +4,7 @@ namespace Sciendo.Common.IO
 {
     public class ContentMover:ContentWriterBase
     {
-        public ContentMover(IDirectoryEnumerator directoryEnumerator, IFileEnumerator fileEnumerator) : base(directoryEnumerator, fileEnumerator)
+        public ContentMover(IDirectory directory) : base(directory)
         {
         }
 

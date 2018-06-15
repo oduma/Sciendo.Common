@@ -166,6 +166,5 @@ namespace Sciendo.Common.IO.MTP
             return new PortableDeviceFile(objectId, fileName);
         }
 
-
     }
 }

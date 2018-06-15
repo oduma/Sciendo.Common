@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Sciendo.Common.Logging;
 
@@ -84,5 +86,6 @@ namespace Sciendo.Common.IO.MTP
 
             mtpFile.Delete(mtpDevice);
         }
+
     }
 }
