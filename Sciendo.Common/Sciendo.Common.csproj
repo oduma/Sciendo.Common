@@ -70,23 +70,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IO\ContentCopier.cs" />
-    <Compile Include="IO\ContentMover.cs" />
-    <Compile Include="IO\ContentWriterBase.cs" />
     <Compile Include="IO\DirectoryMonitor.cs" />
-    <Compile Include="IO\DirectoryOperations.cs" />
     <Compile Include="IO\DirectoryReadEventArgs.cs" />
     <Compile Include="IO\ExtensionsReadEventArgs.cs" />
     <Compile Include="IO\FSDirectory.cs" />
     <Compile Include="IO\FSFile.cs" />
     <Compile Include="IO\FSStorage.cs" />
-    <Compile Include="IO\IContentWriter.cs" />
     <Compile Include="IO\IDirectory.cs" />
-    <Compile Include="IO\IDirectoryOperations.cs" />
     <Compile Include="IO\IFile.cs" />
-    <Compile Include="IO\IFileOperations.cs" />
-    <Compile Include="IO\IFileReader.cs" />
-    <Compile Include="IO\IFilesReader.cs" />
     <Compile Include="IO\IStorage.cs" />
     <Compile Include="IO\MTP\MtpDeviceManager.cs" />
     <Compile Include="IO\MTP\MtpDirectory.cs" />
