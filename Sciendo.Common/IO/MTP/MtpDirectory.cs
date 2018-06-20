@@ -107,7 +107,7 @@ namespace Sciendo.Common.IO.MTP
             {
                 throw new IOException("Folder does not exist.");
             }
-            return mtpFolder.GetChildren(mtpDevice).Select(f => $"{path}{Path.DirectorySeparatorChar}{f.Name}");
+            return mtpFolder.GetChildren(mtpDevice).Where(p=>p is PortableDeviceFolder).Select(f => $"{path}{Path.DirectorySeparatorChar}{f.Name}");
         }
 
 
