@@ -130,7 +130,7 @@ namespace Sciendo.Common.Tests
             MtpDirectory mtpDirectory = new MtpDirectory();
             var result = mtpDirectory.GetTopLevel(@"Xperia XA\SD Card\Music");
             Assert.AreEqual(5,result.Count());
-            Assert.True(result.Any(f=>f=="abc"));
+            Assert.True(result.Any(f=>f== @"Xperia XA\SD Card\Music\abc"));
         }
 
         [Test]
