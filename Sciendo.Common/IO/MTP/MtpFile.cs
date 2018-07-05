@@ -131,6 +131,8 @@ namespace Sciendo.Common.IO.MTP
             byte[] result= new byte[len];
             targetStream.Read(result, 0, (int)len);
             targetStream.Close();
+            resources.Cancel();
+            mtpDevice.Disconnect();
             return result;
         }
 
