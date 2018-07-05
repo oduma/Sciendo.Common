@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using PortableDeviceApiLib;
 using Sciendo.Common.Logging;
 
 namespace Sciendo.Common.IO.MTP
@@ -89,12 +90,57 @@ namespace Sciendo.Common.IO.MTP
 
         public byte[] Read(string path)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            var mtpDevice = MtpDeviceManager.GetPortableDevice(path);
+            if (!Exists(path))
+                throw new ArgumentException("Path does not exist.");
+
+            var mtpFile = mtpDevice.GetObject(path.Replace(MtpPathInterpreter.GetMtpDeviceName(path), string.Empty)) as PortableDeviceFile;
+            if (mtpFile == null)
+            {
+                mtpDevice.Disconnect();
+                throw new IOException("Path not accessible.");
+            }
+
+
+            IPortableDeviceResources resources;
+            mtpDevice.Content.Transfer(out resources);
+
+            PortableDeviceApiLib.IStream wpdStream;
+            uint optimalTransferSize = 0;
+
+            resources.GetStream(mtpFile.Id, ref PortableDevicePKeys.WPD_RESOURCE_DEFAULT, 0, ref optimalTransferSize, out wpdStream);
+
+            System.Runtime.InteropServices.ComTypes.IStream sourceStream = (System.Runtime.InteropServices.ComTypes.IStream)wpdStream;
+
+            MemoryStream targetStream = new MemoryStream();
+
+            unsafe
+            {
+                var buffer = new byte[1024];
+                int bytesRead;
+                do
+                {
+                    sourceStream.Read(buffer, 1024, new IntPtr(&bytesRead));
+                    targetStream.Write(buffer, 0, 1024);
+                } while (bytesRead > 0);
+            }
+            var len = targetStream.Length;
+            byte[] result= new byte[len];
+            targetStream.Read(result, 0, (int)len);
+            targetStream.Close();
+            return result;
         }
 
         public string ReadAllText(string path)
         {
-            throw new NotImplementedException();
+            var bytes = Read(path);
+            var len = bytes.Length;
+            UTF8Encoding encoding = new UTF8Encoding();
+
+            return encoding.GetString(bytes, 0, len);
         }
     }
 }

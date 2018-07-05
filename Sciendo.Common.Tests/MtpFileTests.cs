@@ -81,5 +81,14 @@ namespace Sciendo.Common.Tests
             mtpFile.WriteAllText(@"Xperia XA\SD Card\Music\abc\abc1\wpd.txt","abc is my fav group of letters.");
             Assert.True(mtpFile.Exists(@"Xperia XA\SD Card\Music\abc\abc1\wpd.txt"));
         }
+
+        [Test]
+        public void ReadFileOk()
+        {
+            var mtpFile = new MtpFile();
+            var bytes = mtpFile.Read(@"Xperia XA\SD Card\Music\Super favs\001.flac");
+            Assert.True(mtpFile.Exists(@"Xperia XA\SD Card\Music\abc\abc1\wpd.txt"));
+        }
+
     }
 }
