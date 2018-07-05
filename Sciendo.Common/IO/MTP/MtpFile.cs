@@ -124,7 +124,7 @@ namespace Sciendo.Common.IO.MTP
                 do
                 {
                     sourceStream.Read(buffer, 1024, new IntPtr(&bytesRead));
-                    targetStream.Write(buffer, 0, 1024);
+                    targetStream.Write(buffer, 0, bytesRead);
                 } while (bytesRead > 0);
             }
             var len = targetStream.Length;
