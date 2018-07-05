@@ -18,7 +18,7 @@ namespace Sciendo.Common.IO
 
         public void Create(string path,byte[] body)
         {
-
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
             using (var fs = File.Create(path, body.Length))
             {
                 fs.Write(body, 0, body.Length);
