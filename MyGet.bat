@@ -1,0 +1,1 @@
+"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" Sciendo.Common\Sciendo.Common.csproj /p:AllowUnsafeBlocks=true /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
