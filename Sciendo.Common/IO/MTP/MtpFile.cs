@@ -129,6 +129,7 @@ namespace Sciendo.Common.IO.MTP
             }
             var len = targetStream.Length;
             byte[] result= new byte[len];
+            targetStream.Position = 0;
             targetStream.Read(result, 0, (int)len);
             targetStream.Close();
             resources.Cancel();
